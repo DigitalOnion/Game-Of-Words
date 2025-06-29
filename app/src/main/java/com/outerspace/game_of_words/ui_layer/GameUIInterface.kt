@@ -5,5 +5,6 @@ import kotlinx.coroutines.CoroutineScope
 
 interface GameUIInterface {
     val scope: CoroutineScope
-    fun evaluationResult(result: GameResultInterface)
+    fun evaluateResult(result: GameResultInterface)
+    fun onClickClearButton()
 }

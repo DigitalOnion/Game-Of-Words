@@ -21,8 +21,13 @@ class MainViewModel @Inject constructor(
 
     override val scope = viewModelScope
 
-    override fun evaluationResult(result: GameResultInterface) {
+    override fun evaluateResult(result: GameResultInterface) {
         liveResult.value = result
+    }
+
+    override fun onClickClearButton() {
+        gameBoard.gameRules.clear()
+        gameBoard.gameRules.evaluateContent()
     }
 
     override fun getGameBoard(nCols:Int, nRows: Int, gameUi: GameUIInterface): List<List<GameCell>> {

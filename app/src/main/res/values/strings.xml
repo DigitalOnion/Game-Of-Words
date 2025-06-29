@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Game-Of-Words</string>
+
+    <string name="clear_word_button">Clear Word</string>
 </resources>

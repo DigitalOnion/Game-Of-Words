@@ -8,31 +8,38 @@ import javax.inject.Inject
 
 const val allChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-// GameRules
+interface GameRulesInterface {
+    fun keyFace(n: Int): String
+    fun appendKey(key: String)
+    fun content(): String
+    fun clear()
+    fun evaluateContent()
+}
+
 class GameRules @Inject constructor(
     val dictionaryService: DictionaryApiService
-) {
+): GameRulesInterface {
     lateinit var gameUi: GameUIInterface
 
     val faces = allChars.toList().shuffled()
-    fun keyFace(n: Int): String {
+    override fun keyFace(n: Int): String {
         return faces[n % allChars.length ].toString()
     }
 
     private val buffer = StringBuilder()
-    fun appendKey(key: String) {
+    override fun appendKey(key: String) {
         buffer.append(key)
     }
 
-    fun content(): String {
+    override fun content(): String {
         return buffer.toString()
     }
 
-    fun clear() {
+    override fun clear() {
         buffer.clear()
     }
 
-    fun evaluateContent() {
+    override fun evaluateContent() {
         val content = buffer.toString()
         Log.d("GAME CELL", content)
         gameUi.scope.launch {

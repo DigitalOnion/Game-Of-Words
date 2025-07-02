@@ -4,7 +4,7 @@ import com.outerspace.game_of_words.ui_layer.GameUIInterface
 import kotlinx.coroutines.CoroutineScope
 
 class GameCell(val face: String,
-               val rules: GameRules,
+               val rules: GameRulesInterface,
                ) {
 
     fun onClick() {

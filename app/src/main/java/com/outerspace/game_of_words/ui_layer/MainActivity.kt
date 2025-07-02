@@ -31,6 +31,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.outerspace.game_of_words.data_layer.game.GameCell
+import com.outerspace.game_of_words.data_layer.game.GameRulesInterface
 import com.outerspace.game_of_words.ui.theme.GameOfWordsTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -54,11 +56,14 @@ class MainActivity : ComponentActivity() {
                     stateDefinition = gameResult.definition
                 }
 
+                val matrix = mainVM.getGameBoard(5, 7, mainVM)
+
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column(modifier = Modifier.fillMaxSize()) {
+                        Spacer(Modifier.fillMaxWidth().height(64.dp))
                         GameKeyboard(
                             modifier = Modifier.padding(innerPadding),
-                            mainVM
+                            matrix
                         )
                         Text(
                             text = stateContent,
@@ -88,10 +93,8 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun GameKeyboard(modifier: Modifier = Modifier, mainVM: MainViewModel) {
-    val matrix = mainVM.getGameBoard(5, 7, mainVM)
+fun GameKeyboard(modifier: Modifier = Modifier, matrix: List<List<GameCell>>) {
     Column(modifier.fillMaxWidth()) {
-        Spacer(Modifier.fillMaxWidth().height(64.dp))
         matrix.forEach { row ->
             Spacer(Modifier.fillMaxWidth().height(4.dp))
             Row(modifier = Modifier.fillMaxWidth(),
@@ -111,11 +114,37 @@ fun GameKeyboard(modifier: Modifier = Modifier, mainVM: MainViewModel) {
 
 @Preview(showBackground = true)
 @Composable
-fun GameScreenPreview() {
+fun GameKeyboardPreview() {
+    val fakeGameRules: GameRulesInterface = object: GameRulesInterface {
+        override fun keyFace(n: Int): String { return "x"}
+        override fun appendKey(key: String) {}
+        override fun content(): String { return "No-need"}
+        override fun clear() {}
+        override fun evaluateContent() {}
+    }
+    val gca = GameCell("A", fakeGameRules)
+    val gcb = GameCell("B", fakeGameRules)
+    val gcc = GameCell("C", fakeGameRules)
+    val gcd = GameCell("D", fakeGameRules)
+    val gce = GameCell("E", fakeGameRules)
+    val gcf = GameCell("F", fakeGameRules)
+    val gcg = GameCell("G", fakeGameRules)
+    val gch = GameCell("H", fakeGameRules)
+    val gci = GameCell("I", fakeGameRules)
+    val gcj = GameCell("J", fakeGameRules)
+    val gck = GameCell("K", fakeGameRules)
+    val gcl = GameCell("L", fakeGameRules)
+    val gcm = GameCell("M", fakeGameRules)
+    val gcn = GameCell("N", fakeGameRules)
+    val gco = GameCell("O", fakeGameRules)
+    val gcp = GameCell("P", fakeGameRules)
     GameOfWordsTheme {
-        //val gameRules = GameRules()
-        //val gameBoard = GameBoard(gameRules)
-        //var mainVM = MainViewModel(gameBoard)
-        //GameKeyboard(Modifier, mainVM, )
+        val matrix = listOf(
+            listOf(gca, gcb, gcc, gcd),
+            listOf(gce, gcf, gcg, gch),
+            listOf(gci, gcj, gck, gcl),
+            listOf(gcm, gcn, gco, gcp),
+        )
+        GameKeyboard(Modifier, matrix)
     }
 }

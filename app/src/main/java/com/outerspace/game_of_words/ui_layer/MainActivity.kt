@@ -123,8 +123,7 @@ fun GameKeyboard(modifier: Modifier = Modifier, matrix: List<List<GameCell>>) {
     val margin = 32
     val colGap = 8
     val rowGap = 8
-    var x = 0.dp
-    var y = 0.dp
+
     BoxWithConstraints(modifier.fillMaxWidth().height((nRows * 45).dp)) {
         val density = LocalDensity.current
         val h = (with(density) { this@BoxWithConstraints.maxHeight.toPx() }).toInt() / density.density
@@ -132,20 +131,35 @@ fun GameKeyboard(modifier: Modifier = Modifier, matrix: List<List<GameCell>>) {
 
         val btnWidth = (w - 2 * margin - colGap * (nCols - 1)) / nCols
         val btnHeight = (h - rowGap * (nRows -1 )) / nRows
+        val allButtonList: MutableList<@Composable() () -> Unit> = mutableListOf()
 
         for ((i, row) in matrix.withIndex()) {
             for ((j, cell) in row.withIndex()) {
-                x = (margin + j * btnWidth + j * colGap).dp
-                y = (i * btnHeight + i * rowGap).dp
-                Button(onClick = { cell.onClick() },
-                    modifier = Modifier.absoluteOffset(x,y).width(btnWidth.dp).height(btnHeight.dp),
-                    shape = RoundedCornerShape(8.dp)) {
-                    Text(cell.face,
-                        modifier = Modifier.width(20.dp),
-                        textAlign = TextAlign.Center)
+                allButtonList.add {
+                    var x by remember { mutableStateOf((margin + j * btnWidth + j * colGap).dp) }
+                    var y by remember { mutableStateOf((i * btnHeight + i * rowGap).dp) }
+                    Button(
+                        onClick = {
+                            cell.onClick()
+                            x = x + 30.dp
+                            y = y + 30.dp
+                            },
+                        modifier = Modifier.absoluteOffset(x, y).width(btnWidth.dp)
+                            .height(btnHeight.dp),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text(
+                            cell.face,
+                            modifier = Modifier.width(20.dp),
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
             }
         }
+
+        allButtonList.forEach { it() }
+
     }
 }
 

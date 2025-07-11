@@ -6,17 +6,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -32,9 +28,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.outerspace.game_of_words.data_layer.game.GameBoard
 import com.outerspace.game_of_words.data_layer.game.GameCell
 import com.outerspace.game_of_words.data_layer.game.GameRulesInterface
 import com.outerspace.game_of_words.ui.theme.GameOfWordsTheme
@@ -60,14 +56,13 @@ class MainActivity : ComponentActivity() {
                     stateDefinition = gameResult.definition
                 }
 
-                val matrix = mainVM.getGameBoard(5, 6, mainVM)
+                GameBoard.initializeBoard(5, 6, mainVM.gameRules)  //   = mainVM.getGameBoard(5, 6, mainVM)
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column(modifier = Modifier.fillMaxSize()) {
                         Spacer(Modifier.fillMaxWidth().height(64.dp))
                         GameKeyboard(
                             modifier = Modifier.padding(innerPadding),
-                            matrix
                         )
                         Text(
                             text = stateContent,
@@ -84,7 +79,8 @@ class MainActivity : ComponentActivity() {
                         )
                         Button(
                             onClick = { mainVM.onClickClearButton() },
-                            modifier = Modifier.fillMaxWidth().padding(bottom = 32.dp, start = 32.dp, end = 32.dp)
+                            modifier = Modifier.fillMaxWidth().padding(bottom = 32.dp, start = 32.dp, end = 32.dp),
+                            shape = RoundedCornerShape(8.dp)
                         ) { Text(
                             text = stringResource(R.string.clear_word_button),
                             modifier = Modifier.padding(start = 8.dp, end = 8.dp),
@@ -97,69 +93,21 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun GameKeyboardColumnBased(modifier: Modifier = Modifier, matrix: List<List<GameCell>>) {
-    Column(modifier.fillMaxWidth()) {
-        matrix.forEach { row ->
-            Spacer(Modifier.fillMaxWidth().height(4.dp))
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                row.forEach { cell ->
-                    Button(onClick = { cell.onClick() }, modifier = Modifier, ) {
-                        Text(cell.face,
-                            modifier = Modifier.width(20.dp),
-                            textAlign = TextAlign.Center)
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun GameKeyboard(modifier: Modifier = Modifier, matrix: List<List<GameCell>>) {
-    val nRows = matrix.size
-    val nCols = matrix[0].size
+fun GameKeyboard(modifier: Modifier = Modifier) {
     val margin = 32
     val colGap = 8
     val rowGap = 8
 
-    BoxWithConstraints(modifier.fillMaxWidth().height((nRows * 45).dp)) {
+    BoxWithConstraints(modifier.fillMaxWidth().height((GameBoard.nRows * 45).dp)) {
         val density = LocalDensity.current
         val h = (with(density) { this@BoxWithConstraints.maxHeight.toPx() }).toInt() / density.density
         val w = (with(density) { this@BoxWithConstraints.maxWidth.toPx() }).toInt() / density.density
 
-        val btnWidth = (w - 2 * margin - colGap * (nCols - 1)) / nCols
-        val btnHeight = (h - rowGap * (nRows -1 )) / nRows
-        val allButtonList: MutableList<@Composable() () -> Unit> = mutableListOf()
+        val buttonSpaceParams = GameBoard.ButtonSpaceParams(h, w, margin, colGap, rowGap)
 
-        for ((i, row) in matrix.withIndex()) {
-            for ((j, cell) in row.withIndex()) {
-                allButtonList.add {
-                    var x by remember { mutableStateOf((margin + j * btnWidth + j * colGap).dp) }
-                    var y by remember { mutableStateOf((i * btnHeight + i * rowGap).dp) }
-                    Button(
-                        onClick = {
-                            cell.onClick()
-                            x = x + 30.dp
-                            y = y + 30.dp
-                            },
-                        modifier = Modifier.absoluteOffset(x, y).width(btnWidth.dp)
-                            .height(btnHeight.dp),
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Text(
-                            cell.face,
-                            modifier = Modifier.width(20.dp),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                }
-            }
-        }
+        val allButtonList = GameBoard.buttonList(buttonSpaceParams)
 
         allButtonList.forEach { it() }
-
     }
 }
 
@@ -196,6 +144,6 @@ fun GameKeyboardPreview() {
             listOf(gci, gcj, gck, gcl),
             listOf(gcm, gcn, gco, gcp),
         )
-        GameKeyboard(Modifier, matrix)
+        //GameKeyboard(Modifier, matrix)
     }
 }

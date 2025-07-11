@@ -4,16 +4,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.outerspace.game_of_words.data_layer.game.GameBoard
-import com.outerspace.game_of_words.data_layer.game.GameBoardInterface
-import com.outerspace.game_of_words.data_layer.game.GameCell
 import com.outerspace.game_of_words.data_layer.game.GameResultInterface
+import com.outerspace.game_of_words.data_layer.game.GameRules
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
-    private val gameBoard: GameBoard
-): ViewModel(), GameBoardInterface, GameUIInterface {
+class MainViewModel @Inject constructor(val gameRules: GameRules): ViewModel(), GameUIInterface {
+    init {
+        gameRules.gameUi = this
+    }
 
     val liveResult: MutableLiveData<GameResultInterface> by lazy {
         MutableLiveData<GameResultInterface>()
@@ -26,11 +26,7 @@ class MainViewModel @Inject constructor(
     }
 
     override fun onClickClearButton() {
-        gameBoard.gameRules.clear()
-        gameBoard.gameRules.evaluateContent()
-    }
-
-    override fun getGameBoard(nCols:Int, nRows: Int, gameUi: GameUIInterface): List<List<GameCell>> {
-        return gameBoard.getGameBoard(nCols, nRows, this)
+        GameBoard.gameRules.clear()
+        GameBoard.gameRules.evaluateContent()
     }
 }

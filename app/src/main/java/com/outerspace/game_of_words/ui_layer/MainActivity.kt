@@ -111,39 +111,39 @@ fun GameKeyboard(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GameKeyboardPreview() {
-    val fakeGameRules: GameRulesInterface = object: GameRulesInterface {
-        override fun keyFace(n: Int): String { return "x"}
-        override fun appendKey(key: String) {}
-        override fun content(): String { return "No-need"}
-        override fun clear() {}
-        override fun evaluateContent() {}
-    }
-    val gca = GameCell("A", fakeGameRules)
-    val gcb = GameCell("B", fakeGameRules)
-    val gcc = GameCell("C", fakeGameRules)
-    val gcd = GameCell("D", fakeGameRules)
-    val gce = GameCell("E", fakeGameRules)
-    val gcf = GameCell("F", fakeGameRules)
-    val gcg = GameCell("G", fakeGameRules)
-    val gch = GameCell("H", fakeGameRules)
-    val gci = GameCell("I", fakeGameRules)
-    val gcj = GameCell("J", fakeGameRules)
-    val gck = GameCell("K", fakeGameRules)
-    val gcl = GameCell("L", fakeGameRules)
-    val gcm = GameCell("M", fakeGameRules)
-    val gcn = GameCell("N", fakeGameRules)
-    val gco = GameCell("O", fakeGameRules)
-    val gcp = GameCell("P", fakeGameRules)
-    GameOfWordsTheme {
-        val matrix = listOf(
-            listOf(gca, gcb, gcc, gcd),
-            listOf(gce, gcf, gcg, gch),
-            listOf(gci, gcj, gck, gcl),
-            listOf(gcm, gcn, gco, gcp),
-        )
-        //GameKeyboard(Modifier, matrix)
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun GameKeyboardPreview() {
+//    val fakeGameRules: GameRulesInterface = object: GameRulesInterface {
+//        override fun keyFace(n: Int): String { return "x"}
+//        override fun appendKey(key: String) {}
+//        override fun content(): String { return "No-need"}
+//        override fun clear() {}
+//        override fun evaluateContent() {}
+//    }
+//    val gca = GameCell("A", fakeGameRules)
+//    val gcb = GameCell("B", fakeGameRules)
+//    val gcc = GameCell("C", fakeGameRules)
+//    val gcd = GameCell("D", fakeGameRules)
+//    val gce = GameCell("E", fakeGameRules)
+//    val gcf = GameCell("F", fakeGameRules)
+//    val gcg = GameCell("G", fakeGameRules)
+//    val gch = GameCell("H", fakeGameRules)
+//    val gci = GameCell("I", fakeGameRules)
+//    val gcj = GameCell("J", fakeGameRules)
+//    val gck = GameCell("K", fakeGameRules)
+//    val gcl = GameCell("L", fakeGameRules)
+//    val gcm = GameCell("M", fakeGameRules)
+//    val gcn = GameCell("N", fakeGameRules)
+//    val gco = GameCell("O", fakeGameRules)
+//    val gcp = GameCell("P", fakeGameRules)
+//    GameOfWordsTheme {
+//        val matrix = listOf(
+//            listOf(gca, gcb, gcc, gcd),
+//            listOf(gce, gcf, gcg, gch),
+//            listOf(gci, gcj, gck, gcl),
+//            listOf(gcm, gcn, gco, gcp),
+//        )
+//        //GameKeyboard(Modifier, matrix)
+//    }
+//}

@@ -1,5 +1,6 @@
 package com.outerspace.game_of_words.data_layer.game
 
+import android.R
 import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
@@ -14,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import kotlin.random.Random
 
 object GameBoard {
-    private lateinit var matrix: List<List<GameCell>>
 
     lateinit var gameRules: GameRules
     var nCols = 0
@@ -24,7 +24,6 @@ object GameBoard {
         this.nCols = nCols
         this.nRows = nRows
         this.gameRules = gameRules
-
     }
 
     data class ButtonSpaceParams(
@@ -41,10 +40,8 @@ object GameBoard {
         val btnWidth = ((bsp.w - 2 * bsp.margin - bsp.colGap * (GameBoard.nCols - 1)) / GameBoard.nCols).toInt()
         val btnHeight = ((bsp.h - bsp.rowGap * (GameBoard.nRows -1 )) / GameBoard.nRows).toInt()
 
-        matrix = List(nRows) {
-        rowIndex ->
-            List(nCols) {
-                colIndex ->
+        val matrix = List(nRows) { rowIndex ->
+            List(nCols) { colIndex ->
                     val face = gameRules.keyFace(rowIndex * nCols + colIndex)
                     val xBtn = bsp.margin + colIndex * btnWidth + colIndex * bsp.colGap
                     val yBtn = rowIndex * btnHeight + rowIndex * bsp.rowGap

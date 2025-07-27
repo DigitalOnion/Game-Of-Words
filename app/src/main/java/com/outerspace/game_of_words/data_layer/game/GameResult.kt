@@ -4,3 +4,8 @@ interface GameResultInterface {
     val content: String
     val definition: String
 }
+
+data class GameResult(
+    override val content: String,
+    override val definition: String
+): GameResultInterface

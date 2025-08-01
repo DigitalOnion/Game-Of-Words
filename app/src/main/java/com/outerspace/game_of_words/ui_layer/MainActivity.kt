@@ -80,9 +80,11 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                mainVM.gameRules.liveCellList.observe(this) {
-                    val lastElement = cellList.removeAt(cellList.size - 1)
-                    cellList.add(lastElement)
+                mainVM.gameRules.liveCellList.observe(this) {                       // forces Recomposition of changed cells.
+                    if (cellList.isNotEmpty()) {
+                        val lastElement = cellList.removeAt(cellList.size - 1)
+                        cellList.add(lastElement)
+                    }
                 }
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
